@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Statistics | Research Paper Manager{% endblock %}
+{% block content %}
+<section class="page-header">
+    <div>
+        <span class="eyebrow">COLLECTION INSIGHTS</span>
+        <h1>Publication statistics</h1>
+        <p>See how your paper records are distributed across journals and conferences.</p>
+    </div>
+    <a class="quiet-button" href="/">Back to library</a>
+</section>
+<section class="stats-strip">
+    <div>
+        <span class="stat-label">Total papers</span>
+        <strong>{{ total }}</strong>
+        <span class="stat-note">in your collection</span>
+    </div>
+    <div>
+        <span class="stat-label">Publications</span>
+        <strong>{{ counts|length }}</strong>
+        <span class="stat-note">journals and conferences</span>
+    </div>
+</section>
+<section class="content-panel">
+    {% if counts %}
+    {% set max_count = counts[0][1] %}
+    <div class="panel-heading">
+        <div>
+            <span class="eyebrow">BY PUBLICATION</span>
+            <h2>Records by source</h2>
+        </div>
+        <span class="muted-text">Highest count first</span>
+    </div>
+    <div class="bar-list">
+    {% for publication, count in counts %}
+        <div class="bar-row">
+            <div class="bar-label"><strong>{{ publication }}</strong><span>{{ count }} paper{{ "" if count == 1 else "s" }}</span></div>
+            <div class="bar-track"><div class="bar-fill" style="width: {{ (count / max_count * 100)|round(0, 'common') }}%"></div></div>
+        </div>
+    {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state small">
+        <h2>No statistics yet</h2>
+        <p>Add or import paper records to see publication distribution.</p>
+        <a class="primary-button" href="/papers/new">Add paper</a>
+    </div>
+    {% endif %}
+</section>
+{% endblock %}

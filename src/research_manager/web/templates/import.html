@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Import Papers | Research Paper Manager{% endblock %}
+{% block content %}
+<section class="page-header compact-header">
+    <div>
+        <a class="back-link" href="/">&lt;- Back to library</a>
+        <span class="eyebrow">DATA EXCHANGE</span>
+        <h1>Import paper records</h1>
+        <p>Upload a UTF-8 CSV text file using the standard paper metadata columns.</p>
+    </div>
+</section>
+<section class="import-layout">
+    <div class="content-panel">
+        <div class="panel-heading">
+            <div>
+                <span class="eyebrow">UPLOAD FILE</span>
+                <h2>Bring in a paper collection</h2>
+            </div>
+        </div>
+        <form action="/papers/import" method="post" enctype="multipart/form-data" class="upload-form">
+            <label class="drop-zone" for="file">
+                <span class="upload-mark">CSV</span>
+                <strong>Choose a CSV file</strong>
+                <span>UTF-8 text format, one paper per row</span>
+                <input id="file" name="file" type="file" accept=".csv,.txt,text/csv,text/plain" required>
+            </label>
+            <button class="primary-button" type="submit">Import records</button>
+        </form>
+    </div>
+    <aside class="content-panel format-panel">
+        <span class="eyebrow">EXPECTED HEADER</span>
+        <h2>File format</h2>
+        <code>paper_id,title,authors,institution,publication,publication_date,abstract,keywords</code>
+        <p>Valid rows are imported individually. Duplicate IDs and invalid rows are reported without blocking other valid rows.</p>
+        <a class="quiet-button" href="/papers/export">Download current data</a>
+    </aside>
+</section>
+{% if result %}
+<section class="content-panel result-panel">
+    <div class="panel-heading">
+        <div>
+            <span class="eyebrow">IMPORT RESULT</span>
+            <h2>{{ result.filename }}</h2>
+        </div>
+        <strong class="result-count">{{ result.imported }} imported</strong>
+    </div>
+    {% if result.errors %}
+    <div class="alert warning">
+        <strong>{{ result.errors|length }} row{{ "" if result.errors|length == 1 else "s" }} skipped</strong>
+        <ul>
+        {% for error in result.errors[:12] %}<li>{{ error }}</li>{% endfor %}
+        </ul>
+    </div>
+    {% else %}
+    <p class="success-text">All valid rows were imported successfully.</p>
+    {% endif %}
+</section>
+{% endif %}
+{% endblock %}

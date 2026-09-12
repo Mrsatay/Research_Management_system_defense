@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Research Paper Manager{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='styles.css') }}">
+</head>
+<body>
+    {% if username %}
+    <header class="topbar">
+        <a class="brand" href="/">
+            <span class="brand-mark">RP</span>
+            <span>
+                <strong>Research Paper Manager</strong>
+                <small>Information management workspace</small>
+            </span>
+        </a>
+        <nav class="main-nav" aria-label="Main navigation">
+            <a href="/" class="{% if request.url.path == '/' %}active{% endif %}">Library</a>
+            <a href="/statistics" class="{% if request.url.path == '/statistics' %}active{% endif %}">Statistics</a>
+            <a href="/papers/import" class="{% if request.url.path == '/papers/import' %}active{% endif %}">Import</a>
+            <a href="/papers/export">Export</a>
+        </nav>
+        <div class="user-menu">
+            <span class="user-badge">{{ username[:1]|upper }}</span>
+            <span class="user-name">{{ username }}</span>
+            <form action="/logout" method="post">
+                <button class="link-button" type="submit">Sign out</button>
+            </form>
+        </div>
+    </header>
+    {% endif %}
+    <main class="{% if username %}page-shell{% else %}auth-shell{% endif %}">
+        {% block content %}{% endblock %}
+    </main>
+    <footer class="site-footer">Research Paper Information Management System</footer>
+</body>
+</html>

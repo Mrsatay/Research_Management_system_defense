@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Sign In | Research Paper Manager{% endblock %}
+{% block content %}
+<section class="login-layout">
+    <div class="login-intro">
+        <span class="eyebrow">RESEARCH LIBRARY</span>
+        <h1>Keep every paper within reach.</h1>
+        <p>Manage scholarly records, discover papers quickly, and keep your research information organized in one focused workspace.</p>
+        <div class="intro-points">
+            <span>Structured metadata</span>
+            <span>Fast title and author search</span>
+            <span>Portable CSV exchange</span>
+        </div>
+    </div>
+    <div class="auth-card">
+        <div class="brand compact">
+            <span class="brand-mark">RP</span>
+            <span>
+                <strong>Research Paper Manager</strong>
+                <small>Secure workspace access</small>
+            </span>
+        </div>
+        <div class="section-heading">
+            <span class="eyebrow">WELCOME BACK</span>
+            <h2>Sign in to continue</h2>
+        </div>
+        {% if error %}
+        <div class="alert error">{{ error }}</div>
+        {% endif %}
+        <form action="/login" method="post" class="stack-form">
+            <label for="username">Username</label>
+            <input id="username" name="username" type="text" autocomplete="username" placeholder="Enter username" required autofocus>
+            <label for="password">Password</label>
+            <input id="password" name="password" type="password" autocomplete="current-password" placeholder="Enter password" required>
+            <button class="primary-button full-width" type="submit">Sign in <span aria-hidden="true">-&gt;</span></button>
+        </form>
+        <p class="demo-hint">Demo account: <strong>admin</strong> / <strong>admin123</strong></p>
+    </div>
+</section>
+{% endblock %}

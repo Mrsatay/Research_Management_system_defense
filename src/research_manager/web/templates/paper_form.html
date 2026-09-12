@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}{{ "Edit" if paper else "Add" }} Paper | Research Paper Manager{% endblock %}
+{% block content %}
+<section class="page-header compact-header">
+    <div>
+        <a class="back-link" href="/">&lt;- Back to library</a>
+        <span class="eyebrow">{{ "EDIT RECORD" if paper else "NEW RECORD" }}</span>
+        <h1>{{ "Edit paper information" if paper else "Add a research paper" }}</h1>
+        <p>Complete the required metadata fields below.</p>
+    </div>
+</section>
+{% if error %}
+<div class="alert error">{{ error }}</div>
+{% endif %}
+<section class="form-panel">
+    <form action="{{ '/papers/' ~ paper.paper_id ~ '/edit' if paper else '/papers/new' }}" method="post" class="paper-form">
+        <div class="form-grid">
+            <div class="form-field">
+                <label for="paper_id">Paper ID <span>*</span></label>
+                <input id="paper_id" name="paper_id" value="{{ form_data.get('paper_id', paper.paper_id if paper else '') }}" {% if paper %}readonly{% endif %} required>
+                {% if paper %}<small>Paper ID cannot be changed after creation.</small>{% endif %}
+            </div>
+            <div class="form-field wide">
+                <label for="title">Paper title <span>*</span></label>
+                <input id="title" name="title" value="{{ form_data.get('title', paper.title if paper else '') }}" required>
+            </div>
+            <div class="form-field wide">
+                <label for="authors">Authors <span>*</span></label>
+                <input id="authors" name="authors" value="{{ form_data.get('authors', paper.authors if paper else '') }}" placeholder="Separate multiple authors with semicolons" required>
+            </div>
+            <div class="form-field">
+                <label for="institution">Institution <span>*</span></label>
+                <input id="institution" name="institution" value="{{ form_data.get('institution', paper.institution if paper else '') }}" required>
+            </div>
+            <div class="form-field">
+                <label for="publication">Journal or conference <span>*</span></label>
+                <input id="publication" name="publication" value="{{ form_data.get('publication', paper.publication if paper else '') }}" required>
+            </div>
+            <div class="form-field">
+                <label for="publication_date">Publication date <span>*</span></label>
+                <input id="publication_date" name="publication_date" type="date" max="{{ today }}" value="{{ form_data.get('publication_date', paper.publication_date.isoformat() if paper else '') }}" required>
+                <small>Use a date up to today.</small>
+            </div>
+            <div class="form-field wide">
+                <label for="keywords">Keywords <span>*</span></label>
+                <input id="keywords" name="keywords" value="{{ form_data.get('keywords', paper.keywords if paper else '') }}" placeholder="Separate keywords with semicolons" required>
+            </div>
+            <div class="form-field full">
+                <label for="abstract">Abstract <span>*</span></label>
+                <textarea id="abstract" name="abstract" rows="8" required>{{ form_data.get('abstract', paper.abstract if paper else '') }}</textarea>
+            </div>
+        </div>
+        <div class="form-footer">
+            <span><strong>*</strong> Required field</span>
+            <div>
+                <a class="quiet-button" href="/">Cancel</a>
+                <button class="primary-button" type="submit">{{ "Save changes" if paper else "Create paper" }}</button>
+            </div>
+        </div>
+    </form>
+</section>
+{% endblock %}

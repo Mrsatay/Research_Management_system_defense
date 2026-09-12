@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% block title %}Library | Research Paper Manager{% endblock %}
+{% block content %}
+<section class="page-header">
+    <div>
+        <span class="eyebrow">PAPER LIBRARY</span>
+        <h1>Research paper records</h1>
+        <p>Search, review, and maintain your scholarly collection.</p>
+    </div>
+    <a class="primary-button" href="/papers/new">+ Add paper</a>
+</section>
+
+<section class="stats-strip">
+    <div>
+        <span class="stat-label">Visible records</span>
+        <strong>{{ paper_count }}</strong>
+        <span class="stat-note">{% if query %}matching your search{% else %}in the library{% endif %}</span>
+    </div>
+    <div>
+        <span class="stat-label">Sort order</span>
+        <strong>{{ "Newest" if descending else "Oldest" }}</strong>
+        <span class="stat-note">publication date first</span>
+    </div>
+    <div>
+        <span class="stat-label">Search scope</span>
+        <strong>Title + author</strong>
+        <span class="stat-note">case-insensitive matching</span>
+    </div>
+</section>
+
+<section class="content-panel">
+    <div class="panel-toolbar">
+        <form class="search-form" action="/" method="get">
+            <span class="search-icon" aria-hidden="true">⌕</span>
+            <input name="q" value="{{ query }}" placeholder="Search by title or author..." aria-label="Search by title or author">
+            <input type="hidden" name="sort" value="{{ sort }}">
+            {% if query %}<a class="clear-search" href="/">Clear</a>{% endif %}
+        </form>
+        <div class="toolbar-actions">
+            <a class="quiet-button" href="/?q={{ query|urlencode }}&sort={{ 'oldest' if descending else 'newest' }}">
+                {{ "Oldest first" if descending else "Newest first" }}
+            </a>
+            <a class="quiet-button" href="/papers/import">Import</a>
+            <a class="quiet-button" href="/papers/export">Export</a>
+        </div>
+    </div>
+
+    {% if papers %}
+    <div class="table-wrap">
+        <table class="paper-table">
+            <thead>
+                <tr>
+                    <th>Paper</th>
+                    <th>Authors</th>
+                    <th>Publication</th>
+                    <th>Date</th>
+                    <th>Keywords</th>
+                    <th class="actions-column">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for paper in papers %}
+                <tr>
+                    <td class="paper-title-cell">
+                        <span class="paper-id">{{ paper.paper_id }}</span>
+                        <strong>{{ paper.title }}</strong>
+                        <span>{{ paper.institution }}</span>
+                        <details>
+                            <summary>View abstract</summary>
+                            <p>{{ paper.abstract }}</p>
+                        </details>
+                    </td>
+                    <td>{{ paper.authors }}</td>
+                    <td>{{ paper.publication }}</td>
+                    <td class="date-cell">{{ paper.publication_date.strftime("%d %b %Y") }}</td>
+                    <td><div class="keyword-list">{{ paper.keywords }}</div></td>
+                    <td class="actions-cell">
+                        <a class="icon-link" href="/papers/{{ paper.paper_id }}/edit" title="Edit paper">Edit</a>
+                        <form action="/papers/{{ paper.paper_id }}/delete" method="post" onsubmit="return confirm('Delete this paper record?');">
+                            <button class="danger-link" type="submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <span class="empty-mark">RP</span>
+        <h2>{% if query %}No matching papers{% else %}Your library is empty{% endif %}</h2>
+        <p>{% if query %}Try a different title or author name.{% else %}Add a paper manually or import a CSV file to begin.{% endif %}</p>
+        <a class="primary-button" href="{% if query %}/{% else %}/papers/new{% endif %}">{% if query %}Back to library{% else %}Add first paper{% endif %}</a>
+    </div>
+    {% endif %}
+</section>
+{% endblock %}
