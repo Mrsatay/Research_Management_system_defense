@@ -7,7 +7,10 @@
         <h1>Research paper records</h1>
         <p>Search, review, and maintain your scholarly collection.</p>
     </div>
-    <a class="primary-button" href="/papers/new">+ Add paper</a>
+    <a class="primary-button" href="/papers/new">
+        <svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+        <span>Add paper</span>
+    </a>
 </section>
 
 <section class="stats-strip">
@@ -31,17 +34,24 @@
 <section class="content-panel">
     <div class="panel-toolbar">
         <form class="search-form" action="/" method="get">
-            <span class="search-icon" aria-hidden="true">⌕</span>
+            <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 5 5"/></svg>
             <input name="q" value="{{ query }}" placeholder="Search by title or author..." aria-label="Search by title or author">
             <input type="hidden" name="sort" value="{{ sort }}">
             {% if query %}<a class="clear-search" href="/">Clear</a>{% endif %}
         </form>
         <div class="toolbar-actions">
             <a class="quiet-button" href="/?q={{ query|urlencode }}&sort={{ 'oldest' if descending else 'newest' }}">
-                {{ "Oldest first" if descending else "Newest first" }}
+                <svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5v14"/><path d="m4 8 3-3 3 3"/><path d="M17 19V5"/><path d="m14 16 3 3 3-3"/></svg>
+                <span>{{ "Oldest first" if descending else "Newest first" }}</span>
             </a>
-            <a class="quiet-button" href="/papers/import">Import</a>
-            <a class="quiet-button" href="/papers/export">Export</a>
+            <a class="quiet-button" href="/papers/import">
+                <svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+                <span>Import</span>
+            </a>
+            <a class="quiet-button" href="/papers/export">
+                <svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21V9"/><path d="m7 14 5-5 5 5"/><path d="M5 3h14"/></svg>
+                <span>Export</span>
+            </a>
         </div>
     </div>
 
@@ -75,9 +85,15 @@
                     <td class="date-cell">{{ paper.publication_date.strftime("%d %b %Y") }}</td>
                     <td><div class="keyword-list">{{ paper.keywords }}</div></td>
                     <td class="actions-cell">
-                        <a class="icon-link" href="/papers/{{ paper.paper_id }}/edit" title="Edit paper">Edit</a>
+                        <a class="icon-link" href="/papers/{{ paper.paper_id }}/edit" title="Edit paper">
+                            <svg class="action-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m4 16-.8 4.8L8 20l11.5-11.5a2.8 2.8 0 0 0-4-4L4 16Z"/><path d="m14 6 4 4"/></svg>
+                            <span>Edit</span>
+                        </a>
                         <form action="/papers/{{ paper.paper_id }}/delete" method="post" onsubmit="return confirm('Delete this paper record?');">
-                            <button class="danger-link" type="submit">Delete</button>
+                            <button class="danger-link" type="submit" title="Delete paper">
+                                <svg class="action-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M6 7l1 14h10l1-14"/><path d="M9 7V4h6v3"/></svg>
+                                <span>Delete</span>
+                            </button>
                         </form>
                     </td>
                 </tr>
